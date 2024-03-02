@@ -34,8 +34,11 @@ public class HiloServidor extends Thread {
             s2=new Servidor(serverSocket);
             // Me aseguro que se conecten dos y sólo dos
             try {
+                System.out.println("Esperando a que se conecten dos jugadores...");
                 fs1=s1.Conectar(); // dev stream de salida de jugador 1
+                System.out.println("Jugador 1 conectado");
                 fs2=s2.Conectar(); // dev strean de salida de jugador 2
+                System.out.println("Jugador 2 conectado");
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
