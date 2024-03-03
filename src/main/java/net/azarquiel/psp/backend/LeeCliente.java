@@ -21,18 +21,18 @@ public class LeeCliente extends Thread {
             String cadena, eco = "";
             cadena = fentrada.readLine();
             while (!cadena.equals("*")) {
-                cadena = fentrada.readLine();
                 // formato de la cadena: "jugada 1-1 X"
                 if (cadena.contains("jugada")) {
                     // parsear la cadena y poner la jugada en el tablero
-                    /*String[] jugada = cadena.split(" ");
+                    String[] jugada = cadena.split(" ");
                     String[] coordenadas = jugada[1].split("-");
                     int i = Integer.parseInt(coordenadas[0]);
                     int j = Integer.parseInt(coordenadas[1]);
                     String letra = jugada[2];
-                    tablero.Poner(i, j, letra);*/
+                    tablero.Poner(i, j, letra);
                     System.out.println("Jugada recibida: " + cadena);
                 }
+                cadena = fentrada.readLine();
             }
         } catch (Exception e) {
         }
