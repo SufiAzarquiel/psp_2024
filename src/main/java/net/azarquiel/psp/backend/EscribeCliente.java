@@ -28,6 +28,7 @@ public class EscribeCliente extends Thread{
                 if (cadena.contains("jugada")) {
                     fsalida.println(cadena);
                 }
+                cadena = tablero.getJugada();
                 tablero.setJugada("");
             } while (!cadena.equals("*"));
             in.close();
