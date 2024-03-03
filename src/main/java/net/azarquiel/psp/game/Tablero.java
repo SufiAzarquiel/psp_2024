@@ -18,7 +18,7 @@ public class Tablero extends JFrame {
     JButton[][] boton;
     ActionListener accion;
     Font f;
-    private Compartido compartido;
+    public final Compartido compartido;
 
     public Tablero() {
         super("tres en raya");
@@ -58,7 +58,9 @@ public class Tablero extends JFrame {
         j.repaint();
         // formato de la cadena: "jugada 1-1 X"
         String jugada = "jugada " + j.getActionCommand() + " " + letra;
-        compartido.setJugada(jugada);
+        synchronized (compartido) {
+            compartido.setJugada(jugada);
+        }
     }
 
     public String getJugada() {
