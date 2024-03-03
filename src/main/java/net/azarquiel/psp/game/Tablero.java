@@ -60,6 +60,7 @@ public class Tablero extends JFrame {
         String jugada = "jugada " + j.getActionCommand() + " " + letra;
         synchronized (compartido) {
             compartido.setJugada(jugada);
+            compartido.notifyAll();
         }
     }
 
