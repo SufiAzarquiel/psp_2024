@@ -9,12 +9,10 @@ import java.net.*;
 public class EscribeCliente extends Thread {
     private final Tablero tablero;
     PrintWriter fsalida = null;
-    BufferedReader in;
 
     public EscribeCliente(PrintWriter pfsalida, Tablero tablero) {
         fsalida = pfsalida;
         this.tablero = tablero;
-        in = new BufferedReader(new InputStreamReader(System.in));
         start();
     }
 
@@ -25,6 +23,9 @@ public class EscribeCliente extends Thread {
             do {
                 // formato de la cadena: "jugada 1-1 X"
                 synchronized (tablero.compartido) {
+                    if (tablero.compartido.getJugada().isEmpty()) {
+                        tablero.compartido.wait();
+                    }
                     cadena = tablero.compartido.getJugada();
                 }
                 fsalida.println("jugador ha hecho jugada: " + cadena);
@@ -32,7 +33,6 @@ public class EscribeCliente extends Thread {
                     fsalida.println(cadena);
                 }
             } while (!cadena.equals("*"));
-            in.close();
         } catch (Exception e) {
         }
     }
