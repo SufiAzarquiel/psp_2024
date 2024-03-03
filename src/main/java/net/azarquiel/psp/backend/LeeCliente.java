@@ -6,24 +6,25 @@ import java.io.*;
 import java.net.*;
 
 
-public class LeeCliente extends Thread{
-    BufferedReader fentrada=null;
+public class LeeCliente extends Thread {
+    BufferedReader fentrada = null;
     private final Tablero tablero;
-    public LeeCliente(BufferedReader pfentrada, Tablero tablero){
-        fentrada=pfentrada;
-        this.tablero=tablero;
+
+    public LeeCliente(BufferedReader pfentrada, Tablero tablero) {
+        fentrada = pfentrada;
+        this.tablero = tablero;
         start();
     }
 
-    public void run(){
+    public void run() {
         try {
-            String cadena,eco="";
-            cadena=fentrada.readLine();
-            while (!cadena.equals("*")){
-                System.out.println(" RECIBIDO ---> "+cadena);
-                cadena=fentrada.readLine();
+            String cadena, eco = "";
+            cadena = fentrada.readLine();
+            while (!cadena.equals("*")) {
+                System.out.println(" RECIBIDO ---> " + cadena);
+                cadena = fentrada.readLine();
                 // formato de la cadena: "jugada 1-1 X"
-                if(cadena.contains("jugada")) {
+                if (cadena.contains("jugada")) {
                     String[] jugada = cadena.split(" ");
                     String[] coordenadas = jugada[1].split("-");
                     int i = Integer.parseInt(coordenadas[0]);
@@ -32,6 +33,7 @@ public class LeeCliente extends Thread{
                     tablero.Poner(i, j, letra);
                 }
             }
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 }
