@@ -28,7 +28,6 @@ public class EscribeCliente extends Thread {
                     }
                     cadena = tablero.compartido.getJugada();
                 }
-                fsalida.println("jugador ha hecho jugada: " + cadena);
                 if (cadena.contains("jugada")) {
                     fsalida.println(cadena);
                 }
