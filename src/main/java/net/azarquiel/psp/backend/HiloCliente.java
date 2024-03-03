@@ -12,6 +12,7 @@ public class HiloCliente extends Thread {
     private final String host;
     private final int puerto;
     private Tablero tablero;
+
     public HiloCliente(String host, int puerto, Tablero tablero) {
         this.host = host;
         this.puerto = puerto;
@@ -22,12 +23,12 @@ public class HiloCliente extends Thread {
     @Override
     public void run() {
         try {
-            Socket servidor=new Socket(host,puerto);
-            PrintWriter  flujoSalida= null;
-            flujoSalida = new PrintWriter(servidor.getOutputStream(),true);
-            BufferedReader  flujoEntrada=new BufferedReader(new InputStreamReader(servidor.getInputStream()));
-            LeeCliente lc=new LeeCliente(flujoEntrada, tablero);
-            EscribeCliente ec=new EscribeCliente(flujoSalida, tablero);
+            Socket servidor = new Socket(host, puerto);
+            PrintWriter flujoSalida = null;
+            flujoSalida = new PrintWriter(servidor.getOutputStream(), true);
+            BufferedReader flujoEntrada = new BufferedReader(new InputStreamReader(servidor.getInputStream()));
+            LeeCliente lc = new LeeCliente(flujoEntrada, tablero);
+            EscribeCliente ec = new EscribeCliente(flujoSalida, tablero);
             lc.join();
             ec.join();
             flujoEntrada.close();

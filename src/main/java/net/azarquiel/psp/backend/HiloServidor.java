@@ -19,23 +19,23 @@ public class HiloServidor extends Thread {
 
     @Override
     public void run() {
-        ServerSocket serverSocket= null;
+        ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(puerto);
         } catch (
                 IOException e) {
             throw new RuntimeException(e);
         }
-        PrintWriter fs1=null,fs2=null;
+        PrintWriter fs1 = null, fs2 = null;
         Servidor s1;
         Servidor s2;
-        while (true){
-            s1=new Servidor(serverSocket);
-            s2=new Servidor(serverSocket);
+        while (true) {
+            s1 = new Servidor(serverSocket);
+            s2 = new Servidor(serverSocket);
             // Me aseguro que se conecten dos y sólo dos
             try {
-                fs1=s1.Conectar(); // dev stream de salida de jugador 1
-                fs2=s2.Conectar(); // dev strean de salida de jugador 2
+                fs1 = s1.Conectar(); // dev stream de salida de jugador 1
+                fs2 = s2.Conectar(); // dev strean de salida de jugador 2
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
