@@ -24,13 +24,11 @@ public class EscribeCliente extends Thread {
             System.out.println("Introduce cadena: ");
             do {
                 // formato de la cadena: "jugada 1-1 X"
-                cadena = tablero.getJugada() == null ? "esperando" : tablero.getJugada();
-                fsalida.println("jugador ha hecho jugada" + cadena);
+                cadena = tablero.getJugada();
+                fsalida.println("jugador ha hecho jugada: " + cadena);
                 if (cadena.contains("jugada")) {
                     fsalida.println(cadena);
                 }
-                cadena = tablero.getJugada();
-                tablero.setJugada("");
             } while (!cadena.equals("*"));
             in.close();
         } catch (Exception e) {

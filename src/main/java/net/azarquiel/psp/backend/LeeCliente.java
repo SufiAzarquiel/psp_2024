@@ -25,6 +25,7 @@ public class LeeCliente extends Thread {
                 cadena = fentrada.readLine();
                 // formato de la cadena: "jugada 1-1 X"
                 if (cadena.contains("jugada")) {
+                    // parsear la cadena y poner la jugada en el tablero
                     String[] jugada = cadena.split(" ");
                     String[] coordenadas = jugada[1].split("-");
                     int i = Integer.parseInt(coordenadas[0]);
