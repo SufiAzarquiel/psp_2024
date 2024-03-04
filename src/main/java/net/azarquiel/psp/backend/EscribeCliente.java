@@ -19,7 +19,10 @@ public class EscribeCliente extends Thread {
     public void run() {
         try {
             String cadena, eco = "";
-            System.out.println("Introduce cadena: ");
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Introduce tu nombre: ");
+            eco = in.readLine();
+            fsalida.println("nombre " + eco);
             do {
                 // formato de la cadena: "jugada 1-1 X"
                 synchronized (tablero.compartido) {
