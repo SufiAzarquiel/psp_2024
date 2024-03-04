@@ -1,0 +1,5 @@
+// compilar proyecto
+javac -d target src/main/java/net/azarquiel/psp/Main.java src/main/java/net/azarquiel/psp/backend/*.java
+// crear alias estndo en src para ejecutar el hilo servidor -- ejecutar poniendo "psp" en la consola
+// editar .bashrc con vi o nano,etc
+alias psp="java -cp ~/github/psp_2024/target net.azarquiel.psp.backend.HiloServidor"
