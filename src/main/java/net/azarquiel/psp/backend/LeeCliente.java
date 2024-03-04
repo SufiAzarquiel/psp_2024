@@ -20,6 +20,9 @@ public class LeeCliente extends Thread {
         try {
             String cadena, eco = "";
             cadena = fentrada.readLine();
+            if (cadena.contains("nombre")) {
+                System.out.println("Nombre recibido: " + cadena);
+            }
             while (!cadena.equals("*")) {
                 // formato de la cadena: "jugada 1-1 X"
                 if (cadena.contains("jugada")) {
