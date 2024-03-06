@@ -28,8 +28,14 @@ public class Tablero extends JFrame {
         compartido = new Compartido();
 
         accion = new ActionListener() {
+            private boolean turnoX = true;
             public void actionPerformed(ActionEvent e) {
-                Poner((JButton) e.getSource(), "X");
+                if (turnoX) {
+                    Poner((JButton) e.getSource(), "X");
+                } else {
+                    Poner((JButton) e.getSource(), "O");
+                }
+                turnoX = !turnoX; // Alternar el turno
             }
         };
         boton = new JButton[n][n];
