@@ -45,6 +45,9 @@ public class HiloServidor extends Thread {
             // cruzo los stream de salida e informo
             s1.cargo(fs2);
             s2.cargo(fs1);
+            // mando el turno al jugador 1
+            fs1.println("1"); // turno del jugador 1
+            fs2.println("0"); // jugador 2 espera
             // Activo el funcionamiento cuando haya ya dos
             // sería interesante almacenar los objetos servidor para posteriores intervenciones
             s1.start();
