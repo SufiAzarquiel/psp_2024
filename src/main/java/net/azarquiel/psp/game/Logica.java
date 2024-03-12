@@ -68,6 +68,21 @@ public class Logica extends Thread
         int fila = 0;
         int columna = 0;
         while (this.tablero.hueco() && !this.tablero.enraya()) {
+            // if (System.currentTimeMillis() - inicioTurno >= 2 * 60 * 1000) {
+            //            esMiTurno = !esMiTurno; // Cambiar el turno al otro jugador
+            //            inicioTurno = System.currentTimeMillis(); // Actualizar el tiempo de inicio del turno
+            //            // Notificar al otro jugador que es su turno ahora
+            //            if (esMiTurno) {
+            //                this.tablero.Desactivo(); // Desactivar el tablero para el jugador actual
+            //                this.salida.writeInt(1); // 1 indica que es el turno del jugador 1
+            //            } else {
+            //                this.tablero.Activo(); // Activar el tablero para el otro jugador
+            //                // Indicar al jugador que espere ya que el otro tardó demasiado
+            //                this.salida.writeInt(0); // 0 indica que el jugador debe esperar
+            //            }
+            //            // Saltar al siguiente ciclo del bucle para esperar la respuesta del otro jugador
+            //            continue;
+            //        }
             if (esMiTurno) {
                 this.tablero.Activo();
                 this.compartidoPos.espera();
