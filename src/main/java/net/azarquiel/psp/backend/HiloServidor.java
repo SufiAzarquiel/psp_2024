@@ -49,7 +49,7 @@ public class HiloServidor extends Thread { // Define la clase HiloServidor que e
         } catch (IOException e) {
             throw new RuntimeException(e); // Lanza una excepción si ocurre un error
         }
-        DataOutputStream fs1 = null, fs2 = null; // Declara objetos DataOutputStream para los flujos de salida de los jugadores
+        DataOutputStream outputStreamJugador1 = null, outputStreamJugador2 = null; // Declara objetos DataOutputStream para los flujos de salida de los jugadores
         Servidor s1; // Declara un objeto Servidor para el jugador 1
         Servidor s2; // Declara un objeto Servidor para el jugador 2
         // Mientras el número de jugadores no alcance el límite
@@ -59,23 +59,23 @@ public class HiloServidor extends Thread { // Define la clase HiloServidor que e
             s2 = new Servidor(serverSocket, compartido); // Crea un nuevo Servidor para el jugador 2
             // Se asegura de que se conecten dos y solo dos
             try {
-                fs1 = s1.Conectar(); // Conecta al jugador 1
+                outputStreamJugador1 = s1.Conectar(); // Conecta al jugador 1
                 System.out.println("Jugador 1 conectado"); // Muestra un mensaje de conexión exitosa para el jugador 1
                 compartido.incrementa(); // Incrementa el contador de jugadores
 
-                fs2 = s2.Conectar(); // Conecta al jugador 2
+                outputStreamJugador2 = s2.Conectar(); // Conecta al jugador 2
                 System.out.println("Jugador 2 conectado"); // Muestra un mensaje de conexión exitosa para el jugador 2
                 compartido.incrementa(); // Incrementa el contador de jugadores
             } catch (Exception e) {
                 throw new RuntimeException(e); // Lanza una excepción si ocurre un error
             }
             // Cruza los flujos de salida e informa
-            s1.cargo(fs2); // Asigna el flujo de salida del jugador 2 al jugador 1
-            s2.cargo(fs1); // Asigna el flujo de salida del jugador 1 al jugador 2
+            s1.cargo(outputStreamJugador2); // Asigna el flujo de salida del jugador 2 al jugador 1
+            s2.cargo(outputStreamJugador1); // Asigna el flujo de salida del jugador 1 al jugador 2
             // Envía el turno al jugador 1
             try {
-                fs1.writeInt(1); // Envía un 1 para indicar que es el turno del jugador 1
-                fs2.writeInt(0); // Envía un 0 para indicar que el jugador 2 está en espera
+                outputStreamJugador1.writeInt(1); // Envía un 1 para indicar que es el turno del jugador 1
+                outputStreamJugador2.writeInt(0); // Envía un 0 para indicar que el jugador 2 está en espera
             } catch (IOException e) {
                 throw new RuntimeException(e); // Lanza una excepción si ocurre un error
             }
