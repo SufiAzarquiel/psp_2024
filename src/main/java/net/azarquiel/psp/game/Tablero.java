@@ -68,8 +68,10 @@ public class Tablero extends JFrame implements ActionListener
         this.activo = true;
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                if (this.boton[i][j].getActionCommand().split("-").length != 2) {
-                this.boton[i][j].setEnabled(true);
+                if (this.boton[i][j].getActionCommand().split("-").length == 2) {
+                    this.boton[i][j].setEnabled(false);
+                } else {
+                    this.boton[i][j].setEnabled(true);
                 }
             }
         }
