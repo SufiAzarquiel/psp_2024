@@ -55,9 +55,11 @@ public class HiloServidor extends Thread {
             try {
                 fs1 = s1.Conectar();
                 System.out.println("Jugador 1 conectado");
+                compartido.incrementa();
 
                 fs2 = s2.Conectar();
                 System.out.println("Jugador 2 conectado");
+                compartido.incrementa();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -77,7 +79,6 @@ public class HiloServidor extends Thread {
             // Esperamos a que terminen y cerramos los sockets
             // s1.join();
             // s2.join();
-            compartido.incrementa();
         }
         // Cerramos el servidor
         try {
