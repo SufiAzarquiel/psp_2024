@@ -8,47 +8,53 @@ import java.net.Socket;
 public class Logica extends Thread
 {
     int jugador;
-    Socket estelado;
+    Socket socketJugador;
     DataOutputStream salida;
     DataInputStream entrada;
-    Tablero t;
-    Posicion p;
+    Tablero tablero;
+    Posicion compartidoPos;
     
     public Logica(final Tablero pt, final Posicion pp) {
-        this.estelado = null;
+        this.socketJugador = null;
         this.salida = null;
         this.entrada = null;
-        this.t = pt;
-        this.p = pp;
+        this.tablero = pt;
+        this.compartidoPos = pp;
     }
     
     public void Conecto() {
+        String host = "nube1.sufiazarquiel.com";
+        int puerto = 3030;
         boolean termino = false;
         while (!termino) {
             termino = true;
             try {
-                this.estelado = new Socket("nube1.sufiazarquiel.com", 3030);
+                this.socketJugador = new Socket(host, puerto);
             }
             catch (IOException e) {
                 termino = false;
-                System.out.println(" No me puedo conectar");
+                System.out.printf("Error al conectar con el servidor por el puerto: %d.\nHost: %s\n", puerto, host);
             }
         }
         try {
-            this.salida = new DataOutputStream(this.estelado.getOutputStream());
-            this.entrada = new DataInputStream(this.estelado.getInputStream());
+            this.salida = new DataOutputStream(this.socketJugador.getOutputStream());
+            this.entrada = new DataInputStream(this.socketJugador.getInputStream());
             
         }
-        catch (IOException ex) {}
+        catch (IOException ex) {
+            System.out.println("Error al crear los flujos de entrada y salida");
+        }
     }
     
     public int turno() {
-        int aux = -1;
+        int turno = -1;
         try {
-            aux = this.entrada.readInt();
+            turno = this.entrada.readInt();
         }
-        catch (IOException ex) {}
-        return aux;
+        catch (IOException ex) {
+            System.out.println("Error al leer turno");
+        }
+        return turno;
     }
     
     public void inicio(final int pj) {
@@ -58,46 +64,54 @@ public class Logica extends Thread
 
     @Override
     public void run() {
-        boolean miturno = this.jugador == 1;
+        boolean esMiTurno = this.jugador == 1;
         int fila = 0;
         int columna = 0;
-        while (this.t.hueco() && !this.t.enraya()) {
-            if (miturno) {
-                this.t.Activo();
-                this.p.espera();
+        while (this.tablero.hueco() && !this.tablero.enraya()) {
+            if (esMiTurno) {
+                this.tablero.Activo();
+                this.compartidoPos.espera();
                 try {
-                    this.salida.writeInt(this.p.fila());
-                    this.salida.writeInt(this.p.columna());
+                    this.salida.writeInt(this.compartidoPos.fila());
+                    this.salida.writeInt(this.compartidoPos.columna());
+
                 }
-                catch (IOException ex) {}
+                catch (IOException ex) {
+                    System.out.println("Error al comunicar nueva posicion al tablero");
+                }
             }
             else {
-                this.t.Desactivo();
+                this.tablero.Desactivo();
                 try {
                     fila = this.entrada.readInt();
                     columna = this.entrada.readInt();
-                    this.t.Poner(fila, columna, this.p.otraletra());
+                    this.tablero.Poner(fila, columna, this.compartidoPos.otraletra());
                 }
-                catch (IOException ex2) {}
+                catch (IOException ex2) {
+                    System.out.println("Error al leer nueva posicion del tablero");
+                }
             }
-            miturno = !miturno;
+            esMiTurno = !esMiTurno;
             try {
                 Thread.sleep(500L);
             }
-            catch (InterruptedException ex3) {}
+            catch (InterruptedException ex3) {
+                System.out.println("Hilo de logica interrumpido");
+            }
         }
-        if (this.t.enraya()) {
-            this.t.gano();
+
+        if (this.tablero.enraya()) {
+            this.tablero.gano();
         }
         try {
             Thread.sleep(2000L);
         }
         catch (InterruptedException ex4) {}
-        this.t.dispose();
+        this.tablero.dispose();
         try {
             this.entrada.close();
             this.salida.close();
-            this.estelado.close();
+            this.socketJugador.close();
         }
         catch (IOException ex5) {}
     }

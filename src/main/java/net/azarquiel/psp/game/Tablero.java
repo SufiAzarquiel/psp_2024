@@ -97,10 +97,19 @@ public class Tablero extends JFrame implements ActionListener
     }
     
     public boolean linea(final int x0, final int y0, final int x1, final int y1, final int x2, final int y2) {
-        return !this.boton[x0][y0].getText().equals("") && this.boton[x0][y0].getText().equals(this.boton[x1][y1].getText()) && this.boton[x1][y1].getText().equals(this.boton[x2][y2].getText());
+        return !this.boton[x0][y0].getText().equals("") &&
+                this.boton[x0][y0].getText().equals(this.boton[x1][y1].getText()) &&
+                this.boton[x1][y1].getText().equals(this.boton[x2][y2].getText());
     }
     
     public boolean enraya() {
-        return this.linea(0, 0, 0, 1, 0, 2) || this.linea(1, 0, 1, 1, 1, 2) || this.linea(2, 0, 2, 1, 2, 2) || this.linea(0, 0, 1, 0, 2, 0) || this.linea(0, 1, 1, 1, 2, 1) || this.linea(0, 2, 1, 2, 2, 2) || this.linea(0, 0, 1, 1, 2, 2) || this.linea(0, 2, 1, 1, 2, 0);
+        return  this.linea(0, 0, 0, 1, 0, 2) ||
+                this.linea(1, 0, 1, 1, 1, 2) ||
+                this.linea(2, 0, 2, 1, 2, 2) ||
+                this.linea(0, 0, 1, 0, 2, 0) ||
+                this.linea(0, 1, 1, 1, 2, 1) ||
+                this.linea(0, 2, 1, 2, 2, 2) ||
+                this.linea(0, 0, 1, 1, 2, 2) ||
+                this.linea(0, 2, 1, 1, 2, 0);
     }
 }
