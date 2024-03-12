@@ -20,7 +20,7 @@ public class Timeout extends Thread {
         tiempoInicial = System.currentTimeMillis();
         while (System.currentTimeMillis() - tiempoInicial < segundos * 1000) {
             try {
-                Thread.sleep(1000);
+                sleep(1000);
             } catch (InterruptedException ex) {
                 System.out.println("Error en el hilo de tiempo");
             }
