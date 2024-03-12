@@ -55,6 +55,8 @@ public class Tablero extends JFrame implements ActionListener
             final int fila = Integer.parseInt(aux[0]);
             final int columna = Integer.parseInt(aux[1]);
             this.Poner((JButton)e.getSource(), this.p.letra());
+            ((JButton) e.getSource()).setActionCommand(fila + "-" + columna + "-" + "muerto");
+            ((JButton) e.getSource()).setEnabled(false);
             this.p.cargaPosicion(fila, columna);
             this.activo = false;
             this.p.despierto();
@@ -66,7 +68,9 @@ public class Tablero extends JFrame implements ActionListener
         this.activo = true;
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                this.boton[i][j].setEnabled(true);
+                if (!this.boton[i][j].getActionCommand().split("-")[2].equals("muerto")) {
+                    this.boton[i][j].setEnabled(true);
+                }
             }
         }
     }
