@@ -7,9 +7,26 @@ import java.util.Scanner;
 
 public class HiloServidor extends Thread {
 
+    private static int limite;
     private final int puerto;
 
     public static void main(String[] args) {
+        if (args[0].isEmpty()) {
+            System.out.println("Introduce limite de jugadores.");
+            System.exit(0);
+        } else{
+            limite = Integer.parseInt(args[0]);
+            if (limite % 2 != 0) {
+                System.out.println("El número de jugadores debe ser par.");
+                System.exit(0);
+            } else if (limite < 2) {
+                System.out.println("El número de jugadores debe ser mayor que 1.");
+                System.exit(0);
+            } else if (limite > 100) {
+                System.out.println("El número de jugadores debe ser menor que 100.");
+                System.exit(0);
+            }
+        }
         new HiloServidor(3030);
     }
 
@@ -30,8 +47,8 @@ public class HiloServidor extends Thread {
         PrintWriter fs1 = null, fs2 = null;
         Servidor s1;
         Servidor s2;
-        Scanner scanner = new Scanner(System.in);
-        while (true) {
+        int i = 0;
+        while (i < limite) {
             System.out.println("Esperando jugadores...");
             s1 = new Servidor(serverSocket);
             s2 = new Servidor(serverSocket);
@@ -39,16 +56,9 @@ public class HiloServidor extends Thread {
             try {
                 fs1 = s1.Conectar();
                 System.out.println("Jugador 1 conectado");
-                fs1.println("Ingrese su nombre:");
-                String nombreJugador1 = scanner.nextLine();
-                fs1.println(nombreJugador1);
 
-                s2 = new Servidor(serverSocket);
                 fs2 = s2.Conectar();
                 System.out.println("Jugador 2 conectado");
-                fs2.println("Ingrese su nombre:");
-                String nombreJugador2 = scanner.nextLine();
-                fs2.println(nombreJugador2);
 
                 fs1.println("1"); // turno del jugador 1
                 fs2.println("0"); // jugador 2 espera
