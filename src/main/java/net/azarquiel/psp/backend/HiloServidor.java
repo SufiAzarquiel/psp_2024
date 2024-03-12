@@ -7,6 +7,7 @@ public class HiloServidor extends Thread {
 
     private static int limite;
     private final int puerto;
+    private final Compartido compartido;
 
     public static void main(String[] args) {
         if (args.length == 0 || args[0].isEmpty()) {
@@ -25,11 +26,13 @@ public class HiloServidor extends Thread {
                 System.exit(0);
             }
         }
-        new HiloServidor(3030);
+        Compartido c = new Compartido();
+        new HiloServidor(3030, c);
     }
 
-    public HiloServidor(int puerto) {
+    public HiloServidor(int puerto, Compartido c) {
         this.start();
+        this.compartido = c;
         this.puerto = puerto;
     }
 
@@ -44,11 +47,10 @@ public class HiloServidor extends Thread {
         DataOutputStream fs1 = null, fs2 = null;
         Servidor s1;
         Servidor s2;
-        int i = 0;
-        while (i < limite) {
+        while (compartido.jugadores() < limite) {
             System.out.println("Esperando jugadores...");
-            s1 = new Servidor(serverSocket);
-            s2 = new Servidor(serverSocket);
+            s1 = new Servidor(serverSocket, compartido);
+            s2 = new Servidor(serverSocket, compartido);
             // Me aseguro de que se conecten dos y solo dos
             try {
                 fs1 = s1.Conectar();
@@ -75,7 +77,7 @@ public class HiloServidor extends Thread {
             // Esperamos a que terminen y cerramos los sockets
             // s1.join();
             // s2.join();
-            i += 2; // Incrementamos en dos ya que hemos conectado a dos jugadores
+            compartido.incrementa();
         }
         // Cerramos el servidor
         try {

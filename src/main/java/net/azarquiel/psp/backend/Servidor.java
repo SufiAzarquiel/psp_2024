@@ -3,12 +3,14 @@ import java.io.*;
 import java.net.*;
 
 public class Servidor extends Thread {
+    private final Compartido compartido;
     ServerSocket escucha;
     DataOutputStream fsalida = null, fsalidaOtro = null;
     DataInputStream fentrada = null;
     Socket cliente = null;
 
-    public Servidor(ServerSocket pescucha) {
+    public Servidor(ServerSocket pescucha, Compartido pcompartido) {
+        this.compartido = pcompartido;
         escucha = pescucha;
     }
 
@@ -34,6 +36,7 @@ public class Servidor extends Thread {
             while ((cad = fentrada.readInt()) != -1) {
                 fsalidaOtro.writeInt(cad);
             }
+            compartido.decrementa();
             fentrada.close();
             fsalida.close();
             cliente.close();
