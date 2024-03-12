@@ -38,6 +38,7 @@ public class Tablero extends JFrame implements ActionListener
     
     public void Poner(final int i, final int j, final char letra) {
         this.boton[i][j].setText(new StringBuilder(String.valueOf(letra)).toString());
+        this.boton[i][j].setActionCommand(i + "-" + j + "-" + "d");
         this.boton[i][j].setEnabled(false);
         this.repaint();
     }
