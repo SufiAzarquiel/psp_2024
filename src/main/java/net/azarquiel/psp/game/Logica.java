@@ -101,7 +101,7 @@ public class Logica extends Thread
 
         }
         if (!this.tablero.hueco()) {
-            this.tablero.tablas(); // Si no hay hueco, quedan en tablas
+            this.tablero.tablas(); // Si no hay hueco, quedan en tabla
         }
 
         if (this.tablero.enraya()) {
