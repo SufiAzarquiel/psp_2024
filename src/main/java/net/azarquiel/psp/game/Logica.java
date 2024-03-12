@@ -13,6 +13,7 @@ public class Logica extends Thread
     DataInputStream entrada;
     Tablero tablero;
     Posicion compartidoPos;
+    //String playerName;
     
     public Logica(final Tablero pt, final Posicion pp) {
         this.socketJugador = null;
@@ -21,6 +22,21 @@ public class Logica extends Thread
         this.tablero = pt;
         this.compartidoPos = pp;
     }
+
+    /* public void sendPlayerName(String nombre) {
+        try {
+            this.salida.writeUTF(nombre);
+        } catch (IOException ex) {
+            System.out.println("Error al enviar el nombre del jugador");
+        }
+    }
+    */
+
+    /*
+    public String receivePlayerName() throws IOException {
+        return this.entrada.readUTF();
+    }
+    */
     
     public void Conecto() {
         String host = "nube1.sufiazarquiel.com";
