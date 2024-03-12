@@ -86,6 +86,7 @@ public class Logica extends Thread
         boolean esMiTurno = this.jugador == 1;
         int fila = 0;
         int columna = 0;
+        Timeout tiempo = new Timeout(15); // Crear un hilo de tiempo con 30 segundos
         while (this.tablero.hueco() && !this.tablero.enraya()) {
             // if (System.currentTimeMillis() - inicioTurno >= 2 * 60 * 1000) {
             //            esMiTurno = !esMiTurno; // Cambiar el turno al otro jugador
@@ -113,14 +114,21 @@ public class Logica extends Thread
                 catch (IOException ex) {
                     System.out.println("Error al comunicar nueva posicion al tablero");
                 }
+                tiempo.start();
             }
             else {
                 this.tablero.Desactivo();
+                // Verificar si el tiempo se ha terminado
+                if (tiempo.isTerminado()) {
+                    System.out.println("El tiempo se ha terminado");
+                }
                 try {
                     fila = this.entrada.readInt();
                     columna = this.entrada.readInt();
                     this.tablero.Poner(fila, columna, this.compartidoPos.otraletra());
+                    tiempo = new Timeout(15); // Reiniciar el tiempo
                 }
+
                 catch (IOException ex2) {
                     System.out.println("Error al leer nueva posicion del tablero");
                 }
