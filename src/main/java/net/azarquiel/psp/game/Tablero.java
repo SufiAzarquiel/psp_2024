@@ -13,11 +13,11 @@ public class Tablero extends JFrame implements ActionListener
     JButton[][] boton;
     Font f;
     boolean activo;
-    Posicion p;
+    Posicion posicion;
     
     public Tablero(final Posicion pp) {
         super("tres en raya");
-        this.p = pp;
+        this.posicion = pp;
         this.setSize(500, 500);
         this.setResizable(false);
         this.activo = false;
@@ -55,12 +55,12 @@ public class Tablero extends JFrame implements ActionListener
             final String[] aux = e.getActionCommand().split("-");
             final int fila = Integer.parseInt(aux[0]);
             final int columna = Integer.parseInt(aux[1]);
-            this.Poner((JButton)e.getSource(), this.p.letra());
+            this.Poner((JButton)e.getSource(), this.posicion.letra());
             ((JButton) e.getSource()).setActionCommand(fila + "-" + columna + "-" + "d");
             ((JButton) e.getSource()).setEnabled(false);
-            this.p.cargaPosicion(fila, columna);
+            this.posicion.cargaPosicion(fila, columna);
             this.activo = false;
-            this.p.despierto();
+            this.posicion.despierto();
         }
     }
 
