@@ -30,10 +30,9 @@ public class Servidor extends Thread {
 
     public void run() {
         try {
-            String cad = null;
-            while ((cad = fentrada.readUTF()) != null) {
-                fsalidaOtro.writeUTF(cad);
-                if (cad.equals("*")) break;
+            int cad = 0;
+            while ((cad = fentrada.readInt()) != -1) {
+                fsalidaOtro.writeInt(cad);
             }
             fentrada.close();
             fsalida.close();
