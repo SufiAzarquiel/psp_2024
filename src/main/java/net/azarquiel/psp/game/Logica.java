@@ -96,7 +96,7 @@ public class Logica extends Thread
             //                // Indicar al jugador que espere ya que el otro tardó demasiado
             //                this.salida.writeInt(0); // 0 indica que el jugador debe esperar
             //            }
-            //            // Saltar al siguiente ciclo del bucle para esperar la respuesta del otro jugador
+            //            // Saltar al siguiente ciclo del bucle para esperar la respuesta del otro jugado
             //            continue;
             //        }
             if (esMiTurno) {
