@@ -1,138 +1,143 @@
-package net.azarquiel.psp.game;
+package net.azarquiel.psp.game; // Define el paquete
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
+import java.awt.Font; // Importa la clase Font para establecer el estilo de fuente de los botones
+import java.awt.GridLayout; // Importa GridLayout para organizar los botones en una cuadrícula
+import java.awt.event.ActionEvent; // Importa ActionEvent para manejar eventos de acción
+import java.awt.event.ActionListener; // Importa ActionListener para manejar acciones de los botones
+import javax.swing.JButton; // Importa JButton para crear los botones del juego
+import javax.swing.JFrame; // Importa JFrame para crear la ventana del juego
 
-public class Tablero extends JFrame implements ActionListener
+public class Tablero extends JFrame implements ActionListener // Define la clase Tablero que extiende JFrame e implementa ActionListener
 {
-    final int n = 3;
-    JButton[][] boton;
-    Font f;
-    boolean activo;
-    Posicion posicion;
-    
+    final int n = 3; // Define la dimensión del tablero como 3x3
+    JButton[][] boton; // Matriz de botones que representan el tablero
+    Font f; // Fuente para el texto en los botones
+    boolean activo; // Booleano que indica si es el turno del jugador
+    Posicion p; // Instancia de la clase Posicion para rastrear la posición de las jugadas
+
+    // Constructor de la clase Tablero
     public Tablero(final Posicion pp) {
-        super("tres en raya");
-        this.posicion = pp;
-        this.setSize(500, 500);
-        this.setResizable(false);
-        this.activo = false;
-        this.f = new Font("Monospaced", 0, 100);
-        this.boton = new JButton[3][3];
-        this.setLayout(new GridLayout(3, 3));
+        super("tres en raya"); // Llama al constructor de la clase JFrame con el título "tres en raya"
+        this.p = pp; // Inicializa la instancia de Posicion con el parámetro proporcionado
+        this.setSize(500, 500); // Establece el tamaño de la ventana
+        this.setResizable(false); // Evita que la ventana sea redimensionable
+        this.activo = false; // Inicializa el estado activo como falso
+        this.f = new Font("Monospaced", 0, 100); // Crea una nueva fuente para los botones
+        this.boton = new JButton[3][3]; // Inicializa la matriz de botones
+        this.setLayout(new GridLayout(3, 3)); // Establece el layout de la ventana como una cuadrícula de 3x3
+        // Itera sobre la matriz de botones para crear y configurar cada botón
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                (this.boton[i][j] = new JButton()).setActionCommand(String.valueOf(i) + "-" + j);
-                this.boton[i][j].addActionListener(this);
-                this.boton[i][j].setFont(this.f);
-                this.add(this.boton[i][j]);
+                (this.boton[i][j] = new JButton()).setActionCommand(String.valueOf(i) + "-" + j); // Establece el comando de acción para cada botón
+                this.boton[i][j].addActionListener(this); // Agrega un ActionListener a cada botón
+                this.boton[i][j].setFont(this.f); // Establece la fuente para el texto del botón
+                this.add(this.boton[i][j]); // Agrega el botón a la ventana
             }
         }
-        this.repaint();
-        this.setVisible(true);
+        this.repaint(); // Vuelve a pintar la ventana
+        this.setVisible(true); // Hace visible la ventana
     }
 
-    public void mostrarNombreJugador(String nombre) {
-        // Botón para mostrar el nombre del jugador
-        JButton nombreJugadorButton = new JButton("Turno de: " + nombre);
-        nombreJugadorButton.setFont(new Font("Monospaced", Font.PLAIN, 20));
-        nombreJugadorButton.setEnabled(false);
-
-        //Sale en la parte superior del tablero
-        this.add(nombreJugadorButton, BorderLayout.NORTH);
-
-        this.repaint();
-
-        //this.setTitle("Turno de: " + nombre);
-    }
-    
+    // Método para colocar una ficha en una posición específica del tablero
     public void Poner(final int i, final int j, final char letra) {
-        this.boton[i][j].setText(new StringBuilder(String.valueOf(letra)).toString());
-        this.boton[i][j].setActionCommand(i + "-" + j + "-" + "d");
-        this.boton[i][j].setEnabled(false);
-        this.repaint();
+        this.boton[i][j].setText(new StringBuilder(String.valueOf(letra)).toString()); // Establece el texto del botón en la posición especificada
+        this.boton[i][j].setActionCommand(i + "-" + j + "-" + "d"); // Establece el comando de acción del botón
+        this.boton[i][j].setEnabled(false); // Deshabilita el botón para evitar más clics
+        this.repaint(); // Vuelve a pintar la ventana
     }
-    
+
+    // Método sobrecargado para colocar una ficha en un botón específico
     public void Poner(final JButton j, final char letra) {
-        j.setText(new StringBuilder(String.valueOf(letra)).toString());
-        j.setEnabled(false);
-        j.repaint();
+        j.setText(new StringBuilder(String.valueOf(letra)).toString()); // Establece el texto del botón proporcionado
+        j.setEnabled(false); // Deshabilita el botón proporcionado
+        j.repaint(); // Vuelve a pintar el botón
     }
-    
+
+    // Maneja los eventos de acción cuando se hace clic en un botón
     @Override
     public void actionPerformed(final ActionEvent e) {
-        if (this.activo) {
-            final String[] aux = e.getActionCommand().split("-");
-            final int fila = Integer.parseInt(aux[0]);
-            final int columna = Integer.parseInt(aux[1]);
-            this.Poner((JButton)e.getSource(), this.posicion.letra());
-            ((JButton) e.getSource()).setActionCommand(fila + "-" + columna + "-" + "d");
-            ((JButton) e.getSource()).setEnabled(false);
-            this.posicion.cargaPosicion(fila, columna);
-            this.activo = false;
-            this.posicion.despierto();
+        if (this.activo) { // Si es el turno del jugador
+            final String[] aux = e.getActionCommand().split("-"); // Divide el comando de acción en partes
+            final int fila = Integer.parseInt(aux[0]); // Obtiene la fila del botón clicado
+            final int columna = Integer.parseInt(aux[1]); // Obtiene la columna del botón clicado
+            this.Poner((JButton)e.getSource(), this.p.letra()); // Coloca la ficha en el botón clicado
+            ((JButton) e.getSource()).setActionCommand(fila + "-" + columna + "-" + "d"); // Actualiza el comando de acción del botón
+            ((JButton) e.getSource()).setEnabled(false); // Deshabilita el botón clicado
+            this.p.cargaPosicion(fila, columna); // Actualiza la posición del juego
+            this.activo = false; // Cambia el estado activo a falso
+            this.p.despierto(); // Despierta a la instancia de Posicion
         }
     }
 
+    // Activa el tablero para el turno del jugador
     public void Activo() {
-        this.setTitle("Es tu turno");
-        this.activo = true;
+        this.setTitle("Es tu turno"); // Establece el título de la ventana
+        this.activo = true; // Cambia el estado activo a verdadero
+        // Itera sobre los botones para habilitar los vacíos y deshabilitar los ocupados
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                if (this.boton[i][j].getActionCommand().split("-").length == 3) {
-                    this.boton[i][j].setEnabled(false);
-                } else {
-                    this.boton[i][j].setEnabled(true);
+                if (this.boton[i][j].getActionCommand().split("-").length == 3) { // Si el botón está ocupado
+                    this.boton[i][j].setEnabled(false); // Deshabilita el botón
+                } else { // Si el botón está vacío
+                    this.boton[i][j].setEnabled(true); // Habilita el botón
                 }
             }
         }
     }
 
+    // Desactiva el tablero mientras espera el turno del otro jugador
     public void Desactivo() {
-        this.setTitle("Espera a que el otro juegue");
-        this.activo = false;
+        this.setTitle("Espera a que el otro juegue"); // Establece el título de la ventana
+        this.activo = false; // Cambia el estado activo a falso
+        // Itera sobre los botones para deshabilitarlos todos
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                this.boton[i][j].setEnabled(false);
+                this.boton[i][j].setEnabled(false); // Deshabilita el botón
             }
         }
     }
-    
+
+    // Indica que hay tres en raya
     public void gano() {
-        this.setTitle(" HAY TRES EN RAYA ");
+        this.setTitle
+                (" HAY TRES EN RAYA "); // Establece el título de la ventana como " HAY TRES EN RAYA "
     }
+
+    // Indica que el juego terminó en empate
     public void tablas() {
-        this.setTitle("TABLAS");
+        this.setTitle("TABLAS"); // Establece el título de la ventana como "TABLAS"
     }
-    
+
+    // Verifica si hay algún espacio vacío en el tablero
     public boolean hueco() {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
-                if (this.boton[i][j].getText().equals("")) {
-                    return true;
+                if (this.boton[i][j].getText().equals("")) { // Si hay un botón vacío
+                    return true; // Retorna verdadero
                 }
             }
         }
-        return false;
+        return false; // Retorna falso si no hay ningún botón vacío
     }
-    
+
+    // Verifica si hay una línea de fichas del mismo jugador en el tablero
     public boolean linea(final int x0, final int y0, final int x1, final int y1, final int x2, final int y2) {
-        return !this.boton[x0][y0].getText().equals("") &&
+        return !this.boton[x0][y0].getText().equals("") && // Retorna verdadero si los botones forman una línea y no están vacíos
                 this.boton[x0][y0].getText().equals(this.boton[x1][y1].getText()) &&
                 this.boton[x1][y1].getText().equals(this.boton[x2][y2].getText());
     }
-    
+
+    // Verifica si algún jugador ha ganado
     public boolean enraya() {
-        return  this.linea(0, 0, 0, 1, 0, 2) ||
-                this.linea(1, 0, 1, 1, 1, 2) ||
-                this.linea(2, 0, 2, 1, 2, 2) ||
-                this.linea(0, 0, 1, 0, 2, 0) ||
-                this.linea(0, 1, 1, 1, 2, 1) ||
-                this.linea(0, 2, 1, 2, 2, 2) ||
-                this.linea(0, 0, 1, 1, 2, 2) ||
-                this.linea(0, 2, 1, 1, 2, 0);
+        // Verifica todas las combinaciones posibles de líneas ganadoras
+        return  this.linea(0, 0, 0, 1, 0, 2) || // Horizontal superior
+                this.linea(1, 0, 1, 1, 1, 2) || // Horizontal central
+                this.linea(2, 0, 2, 1, 2, 2) || // Horizontal inferior
+                this.linea(0, 0, 1, 0, 2, 0) || // Vertical izquierda
+                this.linea(0, 1, 1, 1, 2, 1) || // Vertical central
+                this.linea(0, 2, 1, 2, 2, 2) || // Vertical derecha
+                this.linea(0, 0, 1, 1, 2, 2) || // Diagonal principal
+                this.linea(0, 2, 1, 1, 2, 0); // Diagonal secundaria
     }
 }
+
