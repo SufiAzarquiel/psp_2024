@@ -59,9 +59,6 @@ public class HiloServidor extends Thread {
 
                 fs2 = s2.Conectar();
                 System.out.println("Jugador 2 conectado");
-
-                fs1.println("1"); // turno del jugador 1
-                fs2.println("0"); // jugador 2 espera
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
