@@ -3,6 +3,7 @@ package net.azarquiel.psp;
 import net.azarquiel.psp.game.Logica;
 import net.azarquiel.psp.game.Posicion;
 import net.azarquiel.psp.game.Tablero;
+import java.util.Scanner;
 
 public class Main {
 	public static void main(final String[] args) {
@@ -12,6 +13,17 @@ public class Main {
         logica.Conecto();
         final int turno = logica.turno();
 
+        Scanner scanner = new Scanner(System.in);
+
+            System.out.println("Introduce tu nombre:");
+            String nombreJugador = scanner.nextLine();
+
+            // Enviar nombre al servidor
+            logica.enviarNombre(nombreJugador);
+
+            // Recibir nombre del otro jugador y mostrarlo en el tablero
+            String nombreOtroJugador = logica.recibirNombre();
+            t.mostrarNombreJugador(nombreOtroJugador);
         // leer nombre por consola
         // enviar nombre al servidor
         // recibir nombre del otro jugador y meterlo en el tablero
