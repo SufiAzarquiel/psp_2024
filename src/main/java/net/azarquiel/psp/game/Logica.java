@@ -13,7 +13,7 @@ public class Logica extends Thread
     DataInputStream entrada;
     Tablero tablero;
     Posicion compartidoPos;
-    //String playerName;
+    String nombreJugador;
     
     public Logica(final Tablero pt, final Posicion pp) {
         this.socketJugador = null;
@@ -23,20 +23,23 @@ public class Logica extends Thread
         this.compartidoPos = pp;
     }
 
-    /* public void sendPlayerName(String nombre) {
+    public void enviarNombre(String nombre) {
         try {
             this.salida.writeUTF(nombre);
         } catch (IOException ex) {
             System.out.println("Error al enviar el nombre del jugador");
         }
     }
-    */
 
-    /*
-    public String receivePlayerName() throws IOException {
-        return this.entrada.readUTF();
+    public String recibirNombre() {
+        try {
+            return this.entrada.readUTF();
+        } catch (IOException ex) {
+            System.out.println("Error al recibir el nombre del jugador");
+            return null;
+        }
     }
-    */
+
     
     public void Conecto() {
         String host = "nube1.sufiazarquiel.com";
@@ -83,6 +86,17 @@ public class Logica extends Thread
         boolean esMiTurno = this.jugador == 1;
         int fila = 0;
         int columna = 0;
+        String nombreJugador;
+
+        if (esMiTurno) {
+            enviarNombre("Jugador 1");
+            nombreJugador = recibirNombre();
+            this.tablero.mostrarNombreJugador(nombreJugador);
+        } else {
+            nombreJugador = recibirNombre();
+            this.tablero.mostrarNombreJugador(nombreJugador);
+            enviarNombre("Jugador 2");
+        }
         while (this.tablero.hueco() && !this.tablero.enraya()) {
             // if (System.currentTimeMillis() - inicioTurno >= 2 * 60 * 1000) {
             //            esMiTurno = !esMiTurno; // Cambiar el turno al otro jugador
