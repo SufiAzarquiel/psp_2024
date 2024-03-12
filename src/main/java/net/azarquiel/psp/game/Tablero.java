@@ -1,7 +1,6 @@
 package net.azarquiel.psp.game; // Define el paquete
 
-import java.awt.Font; // Importa la clase Font para establecer el estilo de fuente de los botones
-import java.awt.GridLayout; // Importa GridLayout para organizar los botones en una cuadrícula
+import java.awt.*;
 import java.awt.event.ActionEvent; // Importa ActionEvent para manejar eventos de acción
 import java.awt.event.ActionListener; // Importa ActionListener para manejar acciones de los botones
 import javax.swing.JButton; // Importa JButton para crear los botones del juego
@@ -36,6 +35,20 @@ public class Tablero extends JFrame implements ActionListener // Define la clase
         }
         this.repaint(); // Vuelve a pintar la ventana
         this.setVisible(true); // Hace visible la ventana
+    }
+
+    public void mostrarNombreJugador(String nombre) {
+        // Botón para mostrar el nombre del jugador
+        JButton nombreJugadorButton = new JButton("Turno de: " + nombre);
+        nombreJugadorButton.setFont(new Font("Monospaced", Font.PLAIN, 20));
+        nombreJugadorButton.setEnabled(false);
+
+        //Sale en la parte superior del tablero
+        this.add(nombreJugadorButton, BorderLayout.NORTH);
+
+        this.repaint();
+
+        //this.setTitle("Turno de: " + nombre);
     }
 
     // Método para colocar una ficha en una posición específica del tablero
