@@ -134,7 +134,7 @@ public class HiloServidor extends Thread { // Define la clase HiloServidor que e
                 jugador1.start();
                 jugador2.start();
             } else if (clientes.size() == 1) {
-                // Lógica para el caso de un solo cliente conectado
+                clientes.get(0).jugarMaquina();
             }
         }
     }
