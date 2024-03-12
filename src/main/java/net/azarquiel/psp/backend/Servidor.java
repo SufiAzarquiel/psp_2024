@@ -24,6 +24,11 @@ public class Servidor extends Thread {
         return fsalida;
     }
 
+    // Método para recibir el nombre del jugador
+    public String RecibirNombre() throws IOException {
+        return fentrada.readLine();
+    }
+
     public void run() {
         try {
             String cad = null;
