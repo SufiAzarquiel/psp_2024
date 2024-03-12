@@ -60,15 +60,25 @@ public class Tablero extends JFrame implements ActionListener
             this.p.despierto();
         }
     }
-    
+
     public void Activo() {
         this.setTitle("Es tu turno");
         this.activo = true;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                this.boton[i][j].setEnabled(true);
+            }
+        }
     }
-    
+
     public void Desactivo() {
         this.setTitle("Espera a que el otro juegue");
         this.activo = false;
+        for (int i = 0; i < 3; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                this.boton[i][j].setEnabled(false);
+            }
+        }
     }
     
     public void gano() {
