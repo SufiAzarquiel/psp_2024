@@ -1,9 +1,7 @@
 package net.azarquiel.psp.backend;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
-import java.util.Scanner;
 
 public class HiloServidor extends Thread {
 
@@ -11,10 +9,10 @@ public class HiloServidor extends Thread {
     private final int puerto;
 
     public static void main(String[] args) {
-        if (args[0].isEmpty()) {
-            System.out.println("Introduce limite de jugadores.");
+        if (args.length == 0 || args[0].isEmpty()) {
+            System.out.println("Introduce el límite de jugadores.");
             System.exit(0);
-        } else{
+        } else {
             limite = Integer.parseInt(args[0]);
             if (limite % 2 != 0) {
                 System.out.println("El número de jugadores debe ser par.");
@@ -40,11 +38,10 @@ public class HiloServidor extends Thread {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(puerto);
-        } catch (
-                IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        PrintWriter fs1 = null, fs2 = null;
+        DataOutputStream fs1 = null, fs2 = null;
         Servidor s1;
         Servidor s2;
         int i = 0;
@@ -52,7 +49,7 @@ public class HiloServidor extends Thread {
             System.out.println("Esperando jugadores...");
             s1 = new Servidor(serverSocket);
             s2 = new Servidor(serverSocket);
-            //Me aseguro que se conecten dos y sólo dos
+            // Me aseguro de que se conecten dos y solo dos
             try {
                 fs1 = s1.Conectar();
                 System.out.println("Jugador 1 conectado");
@@ -62,20 +59,30 @@ public class HiloServidor extends Thread {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            // cruzo los stream de salida e informo
+            // Cruzamos los streams de salida e informamos
             s1.cargo(fs2);
             s2.cargo(fs1);
-            // mando el turno al jugador 1
-            fs1.println("1"); // turno del jugador 1
-            fs2.println("0"); // jugador 2 espera
-            // Activo el funcionamiento cuando haya ya dos
-            // sería interesante almacenar los objetos servidor para posteriores intervenciones
+            // Enviamos el turno al jugador 1
+            try {
+                fs1.writeInt(1); // turno del jugador 1
+                fs2.writeInt(0); // jugador 2 espera
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            // Activamos el funcionamiento cuando haya ya dos
             s1.start();
             s2.start();
-            // espero a que terminen y cierro los sockets
-            //s1.join();
-            //s2.join();
+            // Esperamos a que terminen y cerramos los sockets
+            // s1.join();
+            // s2.join();
+            i += 2; // Incrementamos en dos ya que hemos conectado a dos jugadores
         }
-        //Demonio.close();
+        // Cerramos el servidor
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
+

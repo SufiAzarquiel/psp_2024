@@ -1,45 +1,45 @@
 package net.azarquiel.psp.backend;
-
 import java.io.*;
 import java.net.*;
 
 public class Servidor extends Thread {
     ServerSocket escucha;
-    PrintWriter fsalida = null, fsalidaOtro = null;
-    BufferedReader fentrada = null;
+    DataOutputStream fsalida = null, fsalidaOtro = null;
+    DataInputStream fentrada = null;
     Socket cliente = null;
 
     public Servidor(ServerSocket pescucha) {
         escucha = pescucha;
     }
 
-    public void cargo(PrintWriter pfsalidaOtro) {
+    public void cargo(DataOutputStream pfsalidaOtro) {
         fsalidaOtro = pfsalidaOtro;
     }
 
-    public PrintWriter Conectar() throws Exception {
+    public DataOutputStream Conectar() throws Exception {
         cliente = escucha.accept();
-        fsalida = new PrintWriter(cliente.getOutputStream(), true);
-        fentrada = new BufferedReader(new InputStreamReader(cliente.getInputStream()));
+        fsalida = new DataOutputStream(cliente.getOutputStream());
+        fentrada = new DataInputStream(cliente.getInputStream());
         return fsalida;
     }
 
     // Método para recibir el nombre del jugador
     public String RecibirNombre() throws IOException {
-        return fentrada.readLine();
+        return fentrada.readUTF();
     }
 
     public void run() {
         try {
             String cad = null;
-            while ((cad = fentrada.readLine()) != null) {
-                fsalidaOtro.println(cad);
+            while ((cad = fentrada.readUTF()) != null) {
+                fsalidaOtro.writeUTF(cad);
                 if (cad.equals("*")) break;
             }
             fentrada.close();
             fsalida.close();
             cliente.close();
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
