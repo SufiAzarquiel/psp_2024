@@ -72,7 +72,7 @@ public class Tablero extends JFrame implements ActionListener
     }
 
     public void Desactivo() {
-        this.setTitle("Espera a que el otro juegue");
+        this.setTitle("Espera a que el otro juegu");
         this.activo = false;
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
