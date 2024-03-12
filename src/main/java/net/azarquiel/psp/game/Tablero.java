@@ -84,6 +84,9 @@ public class Tablero extends JFrame implements ActionListener
     public void gano() {
         this.setTitle(" HAY TRES EN RAYA ");
     }
+    public void tablas() {
+        this.setTitle("TABLAS");
+    }
     
     public boolean hueco() {
         for (int i = 0; i < 3; ++i) {
