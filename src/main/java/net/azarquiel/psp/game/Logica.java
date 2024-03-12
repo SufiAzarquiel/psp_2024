@@ -86,17 +86,6 @@ public class Logica extends Thread
         boolean esMiTurno = this.jugador == 1;
         int fila = 0;
         int columna = 0;
-        String nombreJugador;
-
-        if (esMiTurno) {
-            enviarNombre("Jugador 1");
-            nombreJugador = recibirNombre();
-            this.tablero.mostrarNombreJugador(nombreJugador);
-        } else {
-            nombreJugador = recibirNombre();
-            this.tablero.mostrarNombreJugador(nombreJugador);
-            enviarNombre("Jugador 2");
-        }
         while (this.tablero.hueco() && !this.tablero.enraya()) {
             // if (System.currentTimeMillis() - inicioTurno >= 2 * 60 * 1000) {
             //            esMiTurno = !esMiTurno; // Cambiar el turno al otro jugador

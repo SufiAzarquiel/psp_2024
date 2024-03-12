@@ -4,6 +4,8 @@ public class Posicion { // Define la clase Posicion
     int fila; // Variable para almacenar la fila
     int columna; // Variable para almacenar la columna
     char letra; // Variable para almacenar la letra (X o O)
+    private String nombreJugador; // Variable para almacenar el nombre del jugador
+    private String nombreOponente; // Variable para almacenar el nombre del oponente
 
     // Método sincronizado para hacer que el hilo espere
     public synchronized void espera() {
@@ -48,5 +50,25 @@ public class Posicion { // Define la clase Posicion
     // Método sincronizado para obtener la otra letra (X si la letra actual es O, y viceversa)
     public synchronized char otraletra() {
         return (this.letra == 'X') ? 'O' : 'X'; // Retorna la otra letra
+    }
+
+    // Método sincronizado para obtener el nombre del jugador
+    public synchronized String nombreJugador() {
+        return this.nombreJugador;
+    }
+
+    // Método sincronizado para establecer el nombre del jugador
+    public synchronized void cargaNombreJugador(final String pnombreJugador) {
+        this.nombreJugador = pnombreJugador;
+    }
+
+    // Método sincronizado para obtener el nombre del oponente
+    public synchronized String nombreOponente() {
+        return this.nombreOponente;
+    }
+
+    // Método sincronizado para establecer el nombre del oponente
+    public synchronized void cargaNombreOponente(final String pnombreOponente) {
+        this.nombreOponente = pnombreOponente;
     }
 }

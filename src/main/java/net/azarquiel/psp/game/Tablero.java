@@ -74,7 +74,7 @@ public class Tablero extends JFrame implements ActionListener // Define la clase
 
     // Activa el tablero para el turno del jugador
     public void Activo() {
-        this.setTitle("Es tu turno"); // Establece el título de la ventana
+        this.setTitle("Turno de "  + p.nombreJugador()); // Establece el título de la ventana
         this.activo = true; // Cambia el estado activo a verdadero
         // Itera sobre los botones para habilitar los vacíos y deshabilitar los ocupados
         for (int i = 0; i < 3; ++i) {
@@ -90,7 +90,7 @@ public class Tablero extends JFrame implements ActionListener // Define la clase
 
     // Desactiva el tablero mientras espera el turno del otro jugador
     public void Desactivo() {
-        this.setTitle("Espera a que el otro juegue"); // Establece el título de la ventana
+        this.setTitle("Turno de "  + p.nombreOponente()); // Establece el título de la ventana
         this.activo = false; // Cambia el estado activo a falso
         // Itera sobre los botones para deshabilitarlos todos
         for (int i = 0; i < 3; ++i) {
