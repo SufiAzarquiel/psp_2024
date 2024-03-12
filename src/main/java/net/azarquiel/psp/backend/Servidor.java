@@ -37,6 +37,8 @@ public class Servidor extends Thread { // Define la clase Servidor que extiende 
     // Método run, que se ejecuta cuando se inicia el hilo
     public void run() {
         try {
+            String nombre = RecibirNombre(); // Recibe el nombre del jugador
+            fsalidaOtro.writeUTF(nombre); // Envía el nombre del jugador al otro cliente
             int cad = 0; // Variable para almacenar datos recibidos
             while ((cad = fentrada.readInt()) != -1) { // Mientras haya datos en el flujo de entrada
                 fsalidaOtro.writeInt(cad); // Envía los datos al otro cliente
