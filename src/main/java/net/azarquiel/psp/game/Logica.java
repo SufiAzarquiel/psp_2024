@@ -98,6 +98,9 @@ public class Logica extends Thread
             catch (InterruptedException ex3) {
                 System.out.println("Hilo de logica interrumpido");
             }
+            if (!this.tablero.hueco() && !this.tablero.enraya()) {
+                this.tablero.tablas(); // Si no hay hueco, quedan en tablas
+            }
         }
 
         if (this.tablero.enraya()) {
