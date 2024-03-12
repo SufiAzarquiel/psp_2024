@@ -152,6 +152,8 @@ public class Logica extends Thread
 
         if (this.tablero.enraya()) {
             this.tablero.gano();
+
+
         }
         try {
             Thread.sleep(2000L);
