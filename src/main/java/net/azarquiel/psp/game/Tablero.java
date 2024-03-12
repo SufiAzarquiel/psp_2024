@@ -38,17 +38,7 @@ public class Tablero extends JFrame implements ActionListener // Define la clase
     }
 
     public void mostrarNombreJugador(String nombre) {
-        // Botón para mostrar el nombre del jugador
-        JButton nombreJugadorButton = new JButton("Turno de: " + nombre);
-        nombreJugadorButton.setFont(new Font("Monospaced", Font.PLAIN, 20));
-        nombreJugadorButton.setEnabled(false);
-
-        //Sale en la parte superior del tablero
-        this.add(nombreJugadorButton, BorderLayout.NORTH);
-
-        this.repaint();
-
-        //this.setTitle("Turno de: " + nombre);
+        this.setTitle("Turno de: " + nombre);
     }
 
     // Método para colocar una ficha en una posición específica del tablero
