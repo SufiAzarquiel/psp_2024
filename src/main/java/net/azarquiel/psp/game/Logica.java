@@ -27,7 +27,7 @@ public class Logica extends Thread
         while (!termino) {
             termino = true;
             try {
-                this.estelado = new Socket("psp.sufiazarquiel.com", 3030);
+                this.estelado = new Socket("nube1.sufiazarquiel.com", 3030);
             }
             catch (IOException e) {
                 termino = false;
