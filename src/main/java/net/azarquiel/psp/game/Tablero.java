@@ -3,6 +3,9 @@ package net.azarquiel.psp.game; // Define el paquete
 import java.awt.*;
 import java.awt.event.ActionEvent; // Importa ActionEvent para manejar eventos de acción
 import java.awt.event.ActionListener; // Importa ActionListener para manejar acciones de los botones
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 import javax.swing.JButton; // Importa JButton para crear los botones del juego
 import javax.swing.JFrame; // Importa JFrame para crear la ventana del juego
 
@@ -141,6 +144,26 @@ public class Tablero extends JFrame implements ActionListener // Define la clase
                 this.linea(0, 2, 1, 2, 2, 2) || // Vertical derecha
                 this.linea(0, 0, 1, 1, 2, 2) || // Diagonal principal
                 this.linea(0, 2, 1, 1, 2, 0); // Diagonal secundaria
+    }
+
+    public void enviarPosicionesAlServidor() {
+        try {
+            Socket socket = new Socket("nube1.sufiazarquiel.com", 3030); // Establece la conexión con el servidor en el puerto 1234
+            DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+
+            // Envía las posiciones del tablero al servidor
+            for (int i = 0; i < 3; ++i) {
+                for (int j = 0; j < 3; ++j) {
+                    dataOutputStream.writeInt(boton[i][j].getText().isEmpty() ? 0 : 1); // Envía 1 si la casilla está ocupada, 0 si está vacía
+                }
+            }
+
+            dataOutputStream.flush(); // Limpia el flujo de salida
+            dataOutputStream.close(); // Cierra el flujo de salida
+            socket.close(); // Cierra el socket
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

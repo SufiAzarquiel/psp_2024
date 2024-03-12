@@ -9,11 +9,13 @@ public class Servidor extends Thread { // Define la clase Servidor que extiende 
     DataOutputStream fsalida = null, fsalidaOtro = null; // Flujos de salida para enviar datos
     DataInputStream fentrada = null; // Flujo de entrada para recibir datos
     Socket cliente = null; // Socket del cliente
+    String[][] tablero;
 
     // Constructor de la clase Servidor
     public Servidor(ServerSocket pescucha, Compartido pcompartido) {
         this.compartido = pcompartido; // Inicializa la instancia de Compartido con el parámetro proporcionado
-        escucha = pescucha; // Inicializa el ServerSocket con el parámetro proporcionado
+        escucha = pescucha;// Inicializa el ServerSocket con el parámetro proporcionado
+        tablero = new String[3][3];
     }
 
     // Método para establecer la salida hacia el otro cliente
@@ -50,5 +52,34 @@ public class Servidor extends Thread { // Define la clase Servidor que extiende 
         } catch (Exception e) {
             e.printStackTrace(); // Imprime la traza de la excepción
         }
+    }
+    public void recibirPosicionesDelTablero() {
+        try {
+            ServerSocket serverSocket = new ServerSocket(3030); // Crea un ServerSocket en el puerto 1234
+            Socket socket = serverSocket.accept(); // Espera a que un cliente se conecte
+            DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+
+            // Recibe las posiciones del tablero del cliente
+            for (int i = 0; i < 3; ++i) {
+                for (int j = 0; j < 3; ++j) {
+                    int posicion = dataInputStream.readInt(); // Lee la posición del tablero
+                    // Haz lo que necesites con la posición recibida
+                }
+            }
+
+            dataInputStream.close(); // Cierra el flujo de entrada
+            socket.close(); // Cierra el socket
+            serverSocket.close(); // Cierra el ServerSocket
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void jugarMaquina() {
+        // Posición aleatoria en el tablero y realizar un movimiento en esa posición
+        int fila = (int) (Math.random() * tablero.length);
+        int columna = (int) (Math.random() * tablero[0].length);
+        // Realiza el movimiento en la posición aleatoria
+        // Aquí asumimos que tablero es un array bidimensional que representa el tablero del juego
+        tablero[fila][columna] = "X"; // Por ejemplo, marca la posición con una 'X'
     }
 }
