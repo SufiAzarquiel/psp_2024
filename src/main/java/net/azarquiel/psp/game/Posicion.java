@@ -10,7 +10,7 @@ public class Posicion { // Define la clase Posicion
     // Método sincronizado para hacer que el hilo espere
     public synchronized void espera() {
         try {
-            this.wait(); // El hilo espera hasta que es notificado por otro hilo
+            this.wait(120*1000); // El hilo espera hasta que es notificado por otro hilo o que pasen 2 minutos
         } catch (InterruptedException ex) {
             // Captura y manejo de la excepción de interrupción del hilo
         }
