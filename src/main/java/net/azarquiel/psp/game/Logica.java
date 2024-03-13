@@ -5,16 +5,16 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Logica extends Thread
-{
-    int jugador;
-    Socket socketJugador;
-    DataOutputStream salida;
-    DataInputStream entrada;
-    Tablero tablero;
-    Posicion compartidoPos;
-    String nombreJugador;
-    
+public class Logica extends Thread {
+    int jugador; // Número de jugador
+    Socket socketJugador; // Socket para la conexión del jugador
+    DataOutputStream salida; // Flujo de salida para enviar datos al otro jugador
+    DataInputStream entrada; // Flujo de entrada para recibir datos del otro jugador
+    Tablero tablero; // Instancia del tablero de juego
+    Posicion compartidoPos; // Instancia compartida para determinar la posición actual en el tablero
+    String nombreJugador; // Nombre del jugador
+
+    // Constructor
     public Logica(final Tablero pt, final Posicion pp) {
         this.socketJugador = null;
         this.salida = null;
@@ -23,6 +23,7 @@ public class Logica extends Thread
         this.compartidoPos = pp;
     }
 
+    // Método para enviar el nombre del jugador al otro jugador
     public void enviarNombre(String nombre) {
         try {
             this.salida.writeUTF(nombre);
@@ -31,6 +32,7 @@ public class Logica extends Thread
         }
     }
 
+    // Método para recibir el nombre del otro jugador
     public String recibirNombre() {
         try {
             return this.entrada.readUTF();
@@ -40,7 +42,7 @@ public class Logica extends Thread
         }
     }
 
-    
+    // Método para conectar con el servidor
     public void Conecto() {
         String host = "nube1.sufiazarquiel.com";
         int puerto = 3030;
@@ -49,8 +51,7 @@ public class Logica extends Thread
             termino = true;
             try {
                 this.socketJugador = new Socket(host, puerto);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 termino = false;
                 System.out.printf("Error al conectar con el servidor por el puerto: %d.\nHost: %s\n", puerto, host);
             }
@@ -58,113 +59,79 @@ public class Logica extends Thread
         try {
             this.salida = new DataOutputStream(this.socketJugador.getOutputStream());
             this.entrada = new DataInputStream(this.socketJugador.getInputStream());
-            
-        }
-        catch (IOException ex) {
+
+        } catch (IOException ex) {
             System.out.println("Error al crear los flujos de entrada y salida");
         }
     }
-    
+
+    // Método para obtener el turno del jugador
     public int turno() {
         int turno = -1;
         try {
             turno = this.entrada.readInt();
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             System.out.println("Error al leer turno");
         }
         return turno;
     }
-    
+
+    // Método para iniciar el hilo de la lógica del juego
     public void inicio(final int pj) {
         this.jugador = pj;
         this.start();
     }
 
+    // Método que define la lógica del juego
     @Override
     public void run() {
         boolean esMiTurno = this.jugador == 1;
         int fila = 0;
         int columna = 0;
-        //Timeout tiempo = new Timeout(15); // Crear un hilo de tiempo con 30 segundos
         while (this.tablero.hueco() && !this.tablero.enraya()) {
-            // if (System.currentTimeMillis() - inicioTurno >= 2 * 60 * 1000) {
-            //            esMiTurno = !esMiTurno; // Cambiar el turno al otro jugador
-            //            inicioTurno = System.currentTimeMillis(); // Actualizar el tiempo de inicio del turno
-            //            // Notificar al otro jugador que es su turno ahora
-            //            if (esMiTurno) {
-            //                this.tablero.Desactivo(); // Desactivar el tablero para el jugador actual
-            //                this.salida.writeInt(1); // 1 indica que es el turno del jugador 1
-            //            } else {
-            //                this.tablero.Activo(); // Activar el tablero para el otro jugador
-            //                // Indicar al jugador que espere ya que el otro tardó demasiado
-            //                this.salida.writeInt(0); // 0 indica que el jugador debe esperar
-            //            }
-            //            // Saltar al siguiente ciclo del bucle para esperar la respuesta del otro jugado
-            //            continue;
-            //        }
             if (esMiTurno) {
                 this.tablero.Activo();
-                this.compartidoPos.espera();
+                this.compartidoPos.espera(); // Esperar a que el jugador actual realice su movimiento
                 try {
                     this.salida.writeInt(this.compartidoPos.fila());
                     this.salida.writeInt(this.compartidoPos.columna());
-
-                }
-                catch (IOException ex) {
+                } catch (IOException ex) {
                     System.out.println("Error al comunicar nueva posicion al tablero");
                 }
-                /*if (tiempo.isAlive()) {
-                    tiempo.interrupt();
-                }
-                tiempo.start();*/
-            }
-            else {
+            } else {
                 this.tablero.Desactivo();
-                // Verificar si el tiempo se ha terminado
-                /*if (tiempo.isTerminado()) {
-                    System.out.println("El tiempo se ha terminado");
-                }*/
                 try {
                     fila = this.entrada.readInt();
                     columna = this.entrada.readInt();
                     this.tablero.Poner(fila, columna, this.compartidoPos.otraletra());
-                    /*tiempo.interrupt();
-                    tiempo = new Timeout(15); // Reiniciar el tiempo*/
-                }
-
-                catch (IOException ex2) {
+                } catch (IOException ex2) {
                     System.out.println("Error al leer nueva posicion del tablero");
                 }
             }
-            esMiTurno = !esMiTurno;
+            esMiTurno = !esMiTurno; // Cambiar al turno del otro jugador
             try {
-                Thread.sleep(500L);
-            }
-            catch (InterruptedException ex3) {
+                Thread.sleep(500L); // Esperar un tiempo antes de verificar el estado del juego nuevamente
+            } catch (InterruptedException ex3) {
                 System.out.println("Hilo de logica interrumpido");
             }
-
         }
         if (!this.tablero.hueco()) {
-            this.tablero.tablas(); // Si no hay hueco, quedan en tabla
+            this.tablero.tablas(); // Si no hay más espacios disponibles en el tablero, se declara un empate
         }
 
         if (this.tablero.enraya()) {
-            this.tablero.gano();
-
-
+            this.tablero.gano(); // Si alguien ha ganado, mostrar el mensaje de victoria
         }
         try {
-            Thread.sleep(2000L);
+            Thread.sleep(2000L); // Esperar antes de cerrar el juego
+        } catch (InterruptedException ex4) {
         }
-        catch (InterruptedException ex4) {}
-        this.tablero.dispose();
+        this.tablero.dispose(); // Cerrar el tablero
         try {
-            this.entrada.close();
+            this.entrada.close(); // Cerrar los flujos de entrada y salida
             this.salida.close();
-            this.socketJugador.close();
+            this.socketJugador.close(); // Cerrar el socket
+        } catch (IOException ex5) {
         }
-        catch (IOException ex5) {}
     }
 }
